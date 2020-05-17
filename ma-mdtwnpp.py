@@ -6,10 +6,20 @@
 
 import pandas as pd
 import numpy as np
+from random import randint
 
 def lecturaDatos(nombre_archivo):
     data = pd.read_csv(nombre_archivo,header=None)
     return(data.to_numpy())
+
+def generaPoblacion(data,n_poblacion,n):
+    poblacion = []
+    for i in range(n_poblacion):
+        l = []
+        for j in range(n):
+            l.append(randint(0,1))
+        poblacion.append(l)
+    return(np.array(poblacion))
 
 
 def fitness(clase0,clase1,data):
