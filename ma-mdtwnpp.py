@@ -25,6 +25,12 @@ def generaPoblacion(n_poblacion,n):
     return(np.array(poblacion))
 
 
+def crossover(descendientes,data):
+    ...
+
+def mutacion(porcentaje):
+    ...
+
 def fitness(cromosoma,data):
     df0 = np.argwhere(cromosoma == 0)
     df1 = np.argwhere(cromosoma == 1)
@@ -36,6 +42,6 @@ def fitness(cromosoma,data):
     suma1 = np.sum(df1,axis=0)
     return(max(abs(suma0-suma1)))
 
-def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, descendientes):
+def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, n_descendientes,porcentaje_mutacion):
     data = lecturaDatos(nombre_archivo)
     poblacion = generaPoblacion(n_poblacion,data.shape[1])
