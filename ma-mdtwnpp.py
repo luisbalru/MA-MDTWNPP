@@ -6,19 +6,22 @@
 
 import pandas as pd
 import numpy as np
-from random import randint
+
+def is_arr_in_list(myarr, list_arrays):
+    return next((True for elem in list_arrays if elem is myarr), False)
 
 def lecturaDatos(nombre_archivo):
     data = pd.read_csv(nombre_archivo,header=None)
     return(data.to_numpy())
 
-def generaPoblacion(data,n_poblacion,n):
+def generaPoblacion(n_poblacion,n):
     poblacion = []
-    for i in range(n_poblacion):
-        l = []
-        for j in range(n):
-            l.append(randint(0,1))
-        poblacion.append(l)
+    while len(poblacion) < n_poblacion:
+        l = np.random.rand(n)
+        l[l<0.5] = 0
+        l[l>0.5] = 1
+        if not(is_arr_in_list(l,poblacion)):
+            poblacion.append(l)
     return(np.array(poblacion))
 
 
@@ -31,4 +34,4 @@ def fitness(clase0,clase1,data):
 
 def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, descendientes):
     data = lecturaDatos(nombre_archivo)
-    poblacion = generaPoblacion(data,n_poblacion)
+    poblacion = generaPoblacion(n_poblacion,data.shape[1])
