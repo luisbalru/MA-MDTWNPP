@@ -25,7 +25,11 @@ def generaPoblacion(n_poblacion,n):
     return(np.array(poblacion))
 
 
-def fitness(clase0,clase1,data):
+def fitness(cromosoma,data):
+    df0 = np.argwhere(cromosoma == 0)
+    df1 = np.argwhere(cromosoma == 1)
+    df0 = df0.reshape(df0.shape[0]).tolist()
+    df1 = df1.reshape(df1.shape[0]).tolist()
     df0 = data[clase0,:]
     df1 = data[clase1,:]
     suma0 = np.sum(df0,axis=0)
