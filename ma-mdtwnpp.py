@@ -36,10 +36,10 @@ def generaPoblacion(n_poblacion,n,data):
     return(poblacion)
 
 def torneo(poblacion):
-    a = random.randint(0,len(poblacion))
+    a = random.randint(0,len(poblacion)-1)
     b = a
     while b == a:
-        b = random.randint(0,len(poblacion))
+        b = random.randint(0,len(poblacion)-1)
     cr1 = poblacion[list(poblacion.keys())[a]]
     cr2 = poblacion[list(poblacion.keys())[b]]
     if cr1 < cr2:
@@ -93,23 +93,27 @@ def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, porcentaje_mutacion):
             prog2 = torneo(poblacion)
         desc = crossover(prog1, prog2)
         desc = mutacion(desc,0.2)
-        print(desc)
-        fitness_desc = fitness(np.fromstring(desc),data)
-        list_fitness = poblacion.values()
+        fitness_desc = fitness(np.fromstring(desc,dtype=int, sep=','),data)
+        list_fitness = list(poblacion.values())
         list_fitness = np.array(list_fitness)
         max = np.max(list_fitness)
         arg_max = np.argmax(list_fitness)
         if max > fitness_desc:
             poblacion[desc] = fitness_desc
-            del poblacion[poblacion.keys()[arg_max]]
-    lista_final = poblacion.values()
+            del poblacion[list(poblacion.keys())[arg_max]]
+    lista_final = list(poblacion.values())
     lista_final = np.array(lista_final)
     min = np.min(lista_final)
     arg_min = np.argmin(lista_final)
     print("MEJOR DIVISIÓN")
-    print(poblacion.keys()[arg_min])
+    print(list(poblacion.keys())[arg_min])
     print("Fitness")
     print(min)
+    '''
+    print("Total")
+    for key, value in poblacion.items():
+        print(key, ' : ', value)
+    '''
 
 
-MA_MDTWNPP('data/mdgtw500_20a.txt',10,50,0.1)
+MA_MDTWNPP('data/mdgtw500_20a.txt',100,50,0.2)
