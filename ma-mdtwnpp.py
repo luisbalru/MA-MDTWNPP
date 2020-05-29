@@ -80,7 +80,7 @@ def fitness(cromosoma,data):
     suma1 = np.sum(df1,axis=0)
     return(max(abs(suma0-suma1)))
 
-def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, n_descendientes,porcentaje_mutacion):
+def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, porcentaje_mutacion):
     data = lecturaDatos(nombre_archivo)
     poblacion = generaPoblacion(n_poblacion,data.shape[1],data)
     for i in range(generaciones):
@@ -90,4 +90,22 @@ def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, n_descendientes,porcen
             prog2 = torneo(poblacion)
         desc = crossover(prog1, prog2)
         desc = mutacion(desc,0.2)
-        
+        fitness_desc = fitness(np.fromstring(desc),data)
+        list_fitness = poblacion.values()
+        list_fitness = np.array(list_fitness)
+        max = np.max(list_fitness)
+        arg_max = np.argmax(list_fitness)
+        if max > fitness_desc:
+            poblacion[desc] = fitness_desc
+            del poblacion[poblacion.keys()[arg_max]]
+    lista_final = poblacion.values()
+    lista_final = np.array(lista_final)
+    min = np.min(lista_final)
+    arg_min = np.argmin(lista_final)
+    print("MEJOR DIVISIÓN")
+    print(poblacion.keys()[arg_min])
+    print("Fitness")
+    print(min)
+
+
+MA_MDTWNPP('data/mdgtw500_20a.txt',10,50,0.1)
