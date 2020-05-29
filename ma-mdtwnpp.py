@@ -6,6 +6,8 @@
 
 import pandas as pd
 import numpy as np
+import random
+
 
 def is_arr_in_list(myarr, list_arrays):
     return next((True for elem in list_arrays if elem is myarr), False)
@@ -14,21 +16,41 @@ def lecturaDatos(nombre_archivo):
     data = pd.read_csv(nombre_archivo,header=None)
     return(data.to_numpy())
 
-def generaPoblacion(n_poblacion,n):
-    poblacion = []
+def arraytostr(arr):
+    s = ""
+    for i in range(len(arr)):
+        s = s + str(arr[i]) + ','
+    s = s[:-1]
+    return(s)
+
+def generaPoblacion(n_poblacion,n,data):
+    poblacion = {}
     while len(poblacion) < n_poblacion:
         l = np.random.rand(n)
         l[l<0.5] = 0
         l[l>0.5] = 1
-        if not(is_arr_in_list(l,poblacion)):
-            poblacion.append(l)
-    return(np.array(poblacion))
+        s = arraytostr(l)
+        if s not in poblacion:
+            poblacion[s] = fitness(l,data)
+    return(poblacion)
+
+def torneo(poblacion):
+    a = random.randint(0,len(poblacion))
+    b = a
+    while b == a:
+        b = random.randint(0,len(poblacion))
+    cr1 = poblacion[poblacion.keys()[a]]
+    cr2 = poblacion[poblacion.keys()[b]]
+    if cr1 > cr2:
+        return(poblacion.keys()[a])
+    else:
+        return(poblacion.keys()[b])
 
 
-def crossover(descendientes,data):
+def crossover(crom1,crom2):
     ...
 
-def mutacion(porcentaje):
+def mutacion(crom,porcentaje):
     ...
 
 def fitness(cromosoma,data):
@@ -44,4 +66,10 @@ def fitness(cromosoma,data):
 
 def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, n_descendientes,porcentaje_mutacion):
     data = lecturaDatos(nombre_archivo)
-    poblacion = generaPoblacion(n_poblacion,data.shape[1])
+    poblacion = generaPoblacion(n_poblacion,data.shape[1],data)
+    for i in range(generaciones):
+        prog1 = torneo(poblacion)
+        prog2 = prog1
+        while prog1 == prog2:
+            prog2 = torneo(poblacion)
+        desc = crossover(prog1, prog2)
