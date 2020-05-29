@@ -29,6 +29,7 @@ def generaPoblacion(n_poblacion,n,data):
         l = np.random.rand(n)
         l[l<0.5] = 0
         l[l>0.5] = 1
+        l = l.astype(int)
         s = arraytostr(l)
         if s not in poblacion:
             poblacion[s] = fitness(l,data)
@@ -39,29 +40,31 @@ def torneo(poblacion):
     b = a
     while b == a:
         b = random.randint(0,len(poblacion))
-    cr1 = poblacion[poblacion.keys()[a]]
-    cr2 = poblacion[poblacion.keys()[b]]
-    if cr1 > cr2:
-        return(poblacion.keys()[a])
+    cr1 = poblacion[list(poblacion.keys())[a]]
+    cr2 = poblacion[list(poblacion.keys())[b]]
+    if cr1 < cr2:
+        return(list(poblacion.keys())[a])
     else:
-        return(poblacion.keys()[b])
+        return(list(poblacion.keys())[b])
 
 
 def crossover(crom1,crom2):
+    crom1 = np.fromstring(crom1, dtype=int,sep=',')
+    crom2 = np.fromstring(crom2, dtype=int,sep=',')
     desc = ""
     for i in range(len(crom1)):
         l = random.random()
         if l < 0.5:
-            desc = desc + crom1[i] + ','
+            desc = desc + str(crom1[i]) + ','
         else:
-            desc = desc + crom2[i] + ','
+            desc = desc + str(crom2[i]) + ','
     desc = desc[:-1]
     return(desc)
 
 def mutacion(crom,porcentaje):
     arr = np.fromstring(crom,dtype=int,sep=',')
-    pop = np.arange(0,len(arr))
-    cambios = random.sample(pop,porcentaje*len(arr))
+    tasa_mutacion = porcentaje * len(arr)
+    cambios = random.sample(range(0,len(arr)),int(tasa_mutacion))
     for i in cambios:
         if arr[i] == 0:
             arr[i] = 1
@@ -90,6 +93,7 @@ def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, porcentaje_mutacion):
             prog2 = torneo(poblacion)
         desc = crossover(prog1, prog2)
         desc = mutacion(desc,0.2)
+        print(desc)
         fitness_desc = fitness(np.fromstring(desc),data)
         list_fitness = poblacion.values()
         list_fitness = np.array(list_fitness)
