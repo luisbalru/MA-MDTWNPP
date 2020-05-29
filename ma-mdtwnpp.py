@@ -48,10 +48,26 @@ def torneo(poblacion):
 
 
 def crossover(crom1,crom2):
-    ...
+    desc = ""
+    for i in range(len(crom1)):
+        l = random.random()
+        if l < 0.5:
+            desc = desc + crom1[i] + ','
+        else:
+            desc = desc + crom2[i] + ','
+    desc = desc[:-1]
+    return(desc)
 
 def mutacion(crom,porcentaje):
-    ...
+    arr = np.fromstring(crom,dtype=int,sep=',')
+    pop = np.arange(0,len(arr))
+    cambios = random.sample(pop,porcentaje*len(arr))
+    for i in cambios:
+        if arr[i] == 0:
+            arr[i] = 1
+        else:
+            arr[i] = 0
+    return(arraytostr(arr))
 
 def fitness(cromosoma,data):
     df0 = np.argwhere(cromosoma == 0)
@@ -73,3 +89,5 @@ def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, n_descendientes,porcen
         while prog1 == prog2:
             prog2 = torneo(poblacion)
         desc = crossover(prog1, prog2)
+        desc = mutacion(desc,0.2)
+        
