@@ -32,7 +32,7 @@ def generaPoblacion(n_poblacion,n,data):
         l = l.astype(int)
         s = arraytostr(l)
         if s not in poblacion:
-            _,poblacion[s] = fitness(l,data,False)
+            _,poblacion[s] = fitness(l,data)
     return(poblacion)
 
 def torneo(poblacion):
@@ -72,7 +72,7 @@ def mutacion(crom,porcentaje):
             arr[i] = 0
     return(arraytostr(arr))
 
-def fitness(cromosoma,data,bl=False):
+def fitness(cromosoma,data):
     df0 = np.argwhere(cromosoma == 0)
     df1 = np.argwhere(cromosoma == 1)
     df0 = df0.reshape(df0.shape[0]).tolist()
@@ -84,12 +84,6 @@ def fitness(cromosoma,data,bl=False):
     dif = np.abs(suma0-suma1)
     argmax = np.argmax(dif)
     max = np.max(dif)
-    '''
-    if bl == True:
-        dif = abs(suma0-suma1)
-        argmax = np.argmax(dif)
-        max = max(dif)
-    '''
     return(argmax,max)
 
 def busquedaLocal(cromosoma,data,arg,fitness):
@@ -112,9 +106,9 @@ def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, porcentaje_mutacion):
             prog2 = torneo(poblacion)
         desc = crossover(prog1, prog2)
         desc = mutacion(desc,0.2)
-        arg_max,fitness_desc = fitness(np.fromstring(desc,dtype=int, sep=','),data,True)
+        arg_max,fitness_desc = fitness(np.fromstring(desc,dtype=int, sep=','),data)
         desc = busquedaLocal(np.fromstring(desc,dtype=int, sep=','),data,arg_max,fitness_desc/2)
-        _,fitness_desc = fitness(np.fromstring(desc,dtype=int, sep=','),data,True)
+        _,fitness_desc = fitness(np.fromstring(desc,dtype=int, sep=','),data)
         list_fitness = list(poblacion.values())
         list_fitness = np.array(list_fitness)
         max = np.max(list_fitness)
