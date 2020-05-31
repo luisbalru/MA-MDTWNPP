@@ -92,8 +92,15 @@ def fitness(cromosoma,data,bl=False):
     '''
     return(argmax,max)
 
-def busquedaLocal
-
+def busquedaLocal(cromosoma,data,arg,fitness):
+    df1 = np.argwhere(cromosoma == 1)
+    df1 = df1.reshape(df1.shape[0]).tolist()
+    df1 = data[df1,:]
+    columna = df1[:,arg]
+    fila = np.argmin(np.abs(columna-fitness))
+    cromosoma[fila] = 0
+    desc = arraytostr(cromosoma)
+    return(desc)
 
 def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, porcentaje_mutacion):
     data = lecturaDatos(nombre_archivo)
@@ -106,7 +113,8 @@ def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, porcentaje_mutacion):
         desc = crossover(prog1, prog2)
         desc = mutacion(desc,0.2)
         arg_max,fitness_desc = fitness(np.fromstring(desc,dtype=int, sep=','),data,True)
-        desc = busquedaLocal(desc,data,arg_max,fitness_desc/2)
+        desc = busquedaLocal(np.fromstring(desc,dtype=int, sep=','),data,arg_max,fitness_desc/2)
+        _,fitness_desc = fitness(np.fromstring(desc,dtype=int, sep=','),data,True)
         list_fitness = list(poblacion.values())
         list_fitness = np.array(list_fitness)
         max = np.max(list_fitness)
