@@ -31,8 +31,9 @@ def generaPoblacion(n_poblacion,n,data):
         l[l>0.5] = 1
         l = l.astype(int)
         s = arraytostr(l)
+        print(s)
         if s not in poblacion:
-            poblacion[s] = fitness(l,data,False)
+            _,poblacion[s] = fitness(l,data)
     return(poblacion)
 
 def torneo(poblacion):
@@ -72,7 +73,7 @@ def mutacion(crom,porcentaje):
             arr[i] = 0
     return(arraytostr(arr))
 
-def fitness(cromosoma,data,bl=False):
+def fitness(cromosoma,data):
     df0 = np.argwhere(cromosoma == 0)
     df1 = np.argwhere(cromosoma == 1)
     df0 = df0.reshape(df0.shape[0]).tolist()
@@ -81,11 +82,20 @@ def fitness(cromosoma,data,bl=False):
     df1 = data[df1,:]
     suma0 = np.sum(df0,axis=0)
     suma1 = np.sum(df1,axis=0)
-    if bl == True:
-        dif = abs(suma0-suma1)
-        argmax = np.argmax(dif)
-        max = max(dif)
-    return(max(abs(suma0-suma1)))
+    dif = np.abs(suma0-suma1)
+    argmax = np.argmax(dif)
+    max = max(dif)
+    return(argmax,max)
+
+def busquedaLocal(cromosoma,data,arg,fitness):
+    df1 = np.argwhere(cromosoma == 1)
+    df1 = df1.reshape(df1.shape[0]).tolist()
+    df1 = data[df1,:]
+    columna = df1[:,arg]
+    fila = np.argmin(np.abs(columna-fitness))
+    cromosoma[fila] = 0
+    return(cromosoma)
+
 
 def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, porcentaje_mutacion):
     data = lecturaDatos(nombre_archivo)
@@ -97,7 +107,11 @@ def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, porcentaje_mutacion):
             prog2 = torneo(poblacion)
         desc = crossover(prog1, prog2)
         desc = mutacion(desc,0.2)
-        fitness_desc = fitness(np.fromstring(desc,dtype=int, sep=','),data,True)
+        arg_max,fitness_desc = fitness(np.fromstring(desc,dtype=int, sep=','),data)
+        print(fitness_desc)
+        desc = busquedaLocal(desc,data,arg_max,fitness_desc/2)
+        print(desc)
+        _, fitness_desc = fitness(np.fromstring(desc,dtype=int, sep=','),data)
         list_fitness = list(poblacion.values())
         list_fitness = np.array(list_fitness)
         max = np.max(list_fitness)
