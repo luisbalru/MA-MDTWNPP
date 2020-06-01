@@ -137,66 +137,9 @@ def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, porcentaje_mutacion):
     print("TIEMPO")
     print(tiempo)
 
-'''
-######################
-data/mdgtw500_20a.txt
-######################
-MEJOR DIVISIÓN
-1,1,0,0,0,0,0,1,0,1,0,0,1,1,0,0,1,1,1,1
-Fitness
-131866.84
-MEDIA FITNESS
-268432.3
-TIEMPO
-16.08747959136963
-######################
-data/mdgtw500_20b.txt
-######################
-MEJOR DIVISIÓN
-0,0,1,1,1,0,0,1,0,1,0,1,1,1,0,1,0,0,0,1
-Fitness
-140316.5
-MEDIA FITNESS
-284038.7
-TIEMPO
-16.499571800231934
-######################
-data/mdgtw500_20c.txt
-######################
-MEJOR DIVISIÓN
-1,1,1,0,0,0,1,0,0,0,0,1,1,1,0,0,1,1,0,1
-Fitness
-132556.84
-MEDIA FITNESS
-283297.44
-TIEMPO
-17.429234504699707
-######################
-data/mdgtw500_20d.txt
-######################
-MEJOR DIVISIÓN
-1,0,1,1,1,1,0,0,0,0,0,1,1,0,1,0,0,0,1,1
-Fitness
-115895.25
-MEDIA FITNESS
-275822.7
-TIEMPO
-16.495741605758667
-######################
-data/mdgtw500_20e.txt
-######################
-MEJOR DIVISIÓN
-0,1,1,0,0,1,1,0,1,0,0,1,0,0,0,0,1,1,1,1
-Fitness
-134669.19
-MEDIA FITNESS
-282727.3
-TIEMPO
-17.90236186981201
 
-'''
-#MA_MDTWNPP('data/mdgtw500_20a.txt',10000,5000,0.1)
-#MA_MDTWNPP('data/mdgtw500_20b.txt',10000,5000,0.1)
-#MA_MDTWNPP('data/mdgtw500_20c.txt',10000,5000,0.1)
-#MA_MDTWNPP('data/mdgtw500_20d.txt',10000,5000,0.1)
+MA_MDTWNPP('data/mdgtw500_20a.txt',10000,5000,0.1)
+MA_MDTWNPP('data/mdgtw500_20b.txt',10000,5000,0.1)
+MA_MDTWNPP('data/mdgtw500_20c.txt',10000,5000,0.1)
+MA_MDTWNPP('data/mdgtw500_20d.txt',10000,5000,0.1)
 MA_MDTWNPP('data/mdgtw500_20e.txt',10000,5000,0.1)
