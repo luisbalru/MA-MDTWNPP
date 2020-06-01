@@ -87,37 +87,43 @@ def fitness(cromosoma,data):
     max = np.max(dif)
     return(argmax,max)
 
-def busquedaLocal(cromosoma,data,arg,fitness):
+def busquedaLocal(cromosoma,data,arg,fit):
+    copia = arraytostr(cromosoma)
     df1 = np.argwhere(cromosoma == 1)
     df1 = df1.reshape(df1.shape[0]).tolist()
     df1 = data[df1,:]
     columna = df1[:,arg]
-    fila = np.argmin(np.abs(columna-fitness))
+    fila = np.argmin(np.abs(columna-fit))
     cromosoma[fila] = 0
     desc = arraytostr(cromosoma)
-    return(desc)
+    _,f = fitness(np.fromstring(desc,dtype=int, sep=','),data)
+    if f < 2*fit:
+        return(f,desc)
+    else:
+        return(2*fit,copia)
 
-def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, porcentaje_mutacion):
+def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, hijos,porcentaje_mutacion):
     data = lecturaDatos(nombre_archivo)
     start = time.time()
     poblacion = generaPoblacion(n_poblacion,data.shape[1],data)
     for i in range(generaciones):
-        prog1 = torneo(poblacion)
-        prog2 = prog1
-        while prog1 == prog2:
-            prog2 = torneo(poblacion)
-        desc = crossover(prog1, prog2)
-        desc = mutacion(desc,0.2)
-        arg_max,fitness_desc = fitness(np.fromstring(desc,dtype=int, sep=','),data)
-        desc = busquedaLocal(np.fromstring(desc,dtype=int, sep=','),data,arg_max,fitness_desc/2)
-        _,fitness_desc = fitness(np.fromstring(desc,dtype=int, sep=','),data)
-        list_fitness = list(poblacion.values())
-        list_fitness = np.array(list_fitness)
-        max = np.max(list_fitness)
-        arg_max = np.argmax(list_fitness)
-        if max > fitness_desc:
-            poblacion[desc] = fitness_desc
-            del poblacion[list(poblacion.keys())[arg_max]]
+        for j in range(hijos)
+            prog1 = torneo(poblacion)
+            prog2 = prog1
+            while prog1 == prog2:
+                prog2 = torneo(poblacion)
+            desc = crossover(prog1, prog2)
+            desc = mutacion(desc,0.1)
+            arg_max,fitness_desc = fitness(np.fromstring(desc,dtype=int, sep=','),data)
+            #fitness_desc,desc = busquedaLocal(np.fromstring(desc,dtype=int, sep=','),data,arg_max,fitness_desc/2)
+            #_,fitness_desc = fitness(np.fromstring(desc,dtype=int, sep=','),data)
+            list_fitness = list(poblacion.values())
+            list_fitness = np.array(list_fitness)
+            max = np.max(list_fitness)
+            arg_max = np.argmax(list_fitness)
+            if max > fitness_desc:
+                poblacion[desc] = fitness_desc
+                del poblacion[list(poblacion.keys())[arg_max]]
     end = time.time()
     tiempo = end-start
     lista_final = list(poblacion.values())
@@ -138,8 +144,8 @@ def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, porcentaje_mutacion):
     print(tiempo)
 
 
-MA_MDTWNPP('data/mdgtw500_20a.txt',10000,5000,0.1)
-MA_MDTWNPP('data/mdgtw500_20b.txt',10000,5000,0.1)
-MA_MDTWNPP('data/mdgtw500_20c.txt',10000,5000,0.1)
-MA_MDTWNPP('data/mdgtw500_20d.txt',10000,5000,0.1)
-MA_MDTWNPP('data/mdgtw500_20e.txt',10000,5000,0.1)
+MA_MDTWNPP('data/mdgtw500_20a.txt',10000,5000,5000,0.1)
+MA_MDTWNPP('data/mdgtw500_20b.txt',10000,5000,5000,0.1)
+MA_MDTWNPP('data/mdgtw500_20c.txt',10000,5000,5000,0.1)
+MA_MDTWNPP('data/mdgtw500_20d.txt',10000,5000,5000,0.1)
+MA_MDTWNPP('data/mdgtw500_20e.txt',10000,5000,5000,0.1)
