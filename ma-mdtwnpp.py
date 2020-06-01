@@ -89,18 +89,34 @@ def fitness(cromosoma,data):
 
 def busquedaLocal(cromosoma,data,arg,fit):
     copia = arraytostr(cromosoma)
+    df0 = np.argwhere(cromosoma == 0)
     df1 = np.argwhere(cromosoma == 1)
+    df0 = df0.reshape(df0.shape[0]).tolist()
     df1 = df1.reshape(df1.shape[0]).tolist()
+    df0 = data[df0,:]
     df1 = data[df1,:]
-    columna = df1[:,arg]
-    fila = np.argmin(np.abs(columna-fit))
-    cromosoma[fila] = 0
-    desc = arraytostr(cromosoma)
-    _,f = fitness(np.fromstring(desc,dtype=int, sep=','),data)
-    if f < 2*fit:
-        return(f,desc)
+    suma0 = np.sum(df0,axis=0)
+    suma1 = np.sum(df1,axis=0)
+    if suma1 > suma0:
+        columna = df1[:,arg]
+        fila = np.argmin(np.abs(columna-fit))
+        cromosoma[fila] = 0
+        desc = arraytostr(cromosoma)
+        _,f = fitness(np.fromstring(desc,dtype=int, sep=','),data)
+        if f < 2*fit:
+            return(f,desc)
+        else:
+            return(2*fit,copia)
     else:
-        return(2*fit,copia)
+        columna = df0[:,arg]
+        fila = np.argmin(np.abs(columna-fit))
+        cromosoma[fila] = 1
+        desc = arraytostr(cromosoma)
+        _,f = fitness(np.fromstring(desc,dtype=int, sep=','),data)
+        if f < 2*fit:
+            return(f,desc)
+        else:
+            return(2*fit,copia)
 
 
 def busquedaLocal(cromosoma,data,arg,fit):
