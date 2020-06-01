@@ -7,6 +7,7 @@
 import pandas as pd
 import numpy as np
 import random
+import time
 
 
 def is_arr_in_list(myarr, list_arrays):
@@ -14,7 +15,7 @@ def is_arr_in_list(myarr, list_arrays):
 
 def lecturaDatos(nombre_archivo):
     data = pd.read_csv(nombre_archivo,header=None)
-    return(data.to_numpy())
+    return(data.to_numpy(dtype=np.float32))
 
 def arraytostr(arr):
     s = ""
@@ -98,6 +99,7 @@ def busquedaLocal(cromosoma,data,arg,fitness):
 
 def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, porcentaje_mutacion):
     data = lecturaDatos(nombre_archivo)
+    start = time.time()
     poblacion = generaPoblacion(n_poblacion,data.shape[1],data)
     for i in range(generaciones):
         prog1 = torneo(poblacion)
@@ -116,19 +118,85 @@ def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, porcentaje_mutacion):
         if max > fitness_desc:
             poblacion[desc] = fitness_desc
             del poblacion[list(poblacion.keys())[arg_max]]
+    end = time.time()
+    tiempo = end-start
     lista_final = list(poblacion.values())
     lista_final = np.array(lista_final)
     min = np.min(lista_final)
+    mean = np.mean(lista_final)
     arg_min = np.argmin(lista_final)
+    print("######################")
+    print(nombre_archivo)
+    print("######################")
     print("MEJOR DIVISIÓN")
     print(list(poblacion.keys())[arg_min])
     print("Fitness")
     print(min)
-    '''
-    print("Total")
-    for key, value in poblacion.items():
-        print(key, ' : ', value)
-    '''
+    print("MEDIA FITNESS")
+    print(mean)
+    print("TIEMPO")
+    print(tiempo)
 
+'''
+######################
+data/mdgtw500_20a.txt
+######################
+MEJOR DIVISIÓN
+1,1,0,0,0,0,0,1,0,1,0,0,1,1,0,0,1,1,1,1
+Fitness
+131866.84
+MEDIA FITNESS
+268432.3
+TIEMPO
+16.08747959136963
+######################
+data/mdgtw500_20b.txt
+######################
+MEJOR DIVISIÓN
+0,0,1,1,1,0,0,1,0,1,0,1,1,1,0,1,0,0,0,1
+Fitness
+140316.5
+MEDIA FITNESS
+284038.7
+TIEMPO
+16.499571800231934
+######################
+data/mdgtw500_20c.txt
+######################
+MEJOR DIVISIÓN
+1,1,1,0,0,0,1,0,0,0,0,1,1,1,0,0,1,1,0,1
+Fitness
+132556.84
+MEDIA FITNESS
+283297.44
+TIEMPO
+17.429234504699707
+######################
+data/mdgtw500_20d.txt
+######################
+MEJOR DIVISIÓN
+1,0,1,1,1,1,0,0,0,0,0,1,1,0,1,0,0,0,1,1
+Fitness
+115895.25
+MEDIA FITNESS
+275822.7
+TIEMPO
+16.495741605758667
+######################
+data/mdgtw500_20e.txt
+######################
+MEJOR DIVISIÓN
+0,1,1,0,0,1,1,0,1,0,0,1,0,0,0,0,1,1,1,1
+Fitness
+134669.19
+MEDIA FITNESS
+282727.3
+TIEMPO
+17.90236186981201
 
-MA_MDTWNPP('data/mdgtw500_20a.txt',100,50,0.1)
+'''
+#MA_MDTWNPP('data/mdgtw500_20a.txt',10000,5000,0.1)
+#MA_MDTWNPP('data/mdgtw500_20b.txt',10000,5000,0.1)
+#MA_MDTWNPP('data/mdgtw500_20c.txt',10000,5000,0.1)
+#MA_MDTWNPP('data/mdgtw500_20d.txt',10000,5000,0.1)
+MA_MDTWNPP('data/mdgtw500_20e.txt',10000,5000,0.1)
