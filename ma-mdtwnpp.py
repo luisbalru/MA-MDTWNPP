@@ -32,7 +32,6 @@ def generaPoblacion(n_poblacion,n,data):
         l[l>0.5] = 1
         l = l.astype(int)
         s = arraytostr(l)
-        print(s)
         if s not in poblacion:
             _,poblacion[s] = fitness(l,data)
     return(poblacion)
@@ -85,7 +84,7 @@ def fitness(cromosoma,data):
     suma1 = np.sum(df1,axis=0)
     dif = np.abs(suma0-suma1)
     argmax = np.argmax(dif)
-    max = max(dif)
+    max = np.max(dif)
     return(argmax,max)
 
 def busquedaLocal(cromosoma,data,arg,fit):
@@ -124,7 +123,7 @@ def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, hijos,porcentaje_mutac
     start = time.time()
     poblacion = generaPoblacion(n_poblacion,data.shape[1],data)
     for i in range(generaciones):
-        for j in range(hijos)
+        for j in range(hijos):
             prog1 = torneo(poblacion)
             prog2 = prog1
             while prog1 == prog2:
@@ -132,8 +131,8 @@ def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, hijos,porcentaje_mutac
             desc = crossover(prog1, prog2)
             desc = mutacion(desc,0.1)
             arg_max,fitness_desc = fitness(np.fromstring(desc,dtype=int, sep=','),data)
-            #fitness_desc,desc = busquedaLocal(np.fromstring(desc,dtype=int, sep=','),data,arg_max,fitness_desc/2)
-            #_,fitness_desc = fitness(np.fromstring(desc,dtype=int, sep=','),data)
+            fitness_desc,desc = busquedaLocal(np.fromstring(desc,dtype=int, sep=','),data,arg_max,fitness_desc/2)
+            _,fitness_desc = fitness(np.fromstring(desc,dtype=int, sep=','),data)
             list_fitness = list(poblacion.values())
             list_fitness = np.array(list_fitness)
             max = np.max(list_fitness)
@@ -161,8 +160,8 @@ def MA_MDTWNPP(nombre_archivo, generaciones, n_poblacion, hijos,porcentaje_mutac
     print(tiempo)
 
 
-MA_MDTWNPP('data/mdgtw500_20a.txt',10000,5000,5000,0.1)
-MA_MDTWNPP('data/mdgtw500_20b.txt',10000,5000,5000,0.1)
-MA_MDTWNPP('data/mdgtw500_20c.txt',10000,5000,5000,0.1)
-MA_MDTWNPP('data/mdgtw500_20d.txt',10000,5000,5000,0.1)
-MA_MDTWNPP('data/mdgtw500_20e.txt',10000,5000,5000,0.1)
+MA_MDTWNPP('data/mdgtw500_20a.txt',10000,5000,50,0.1)
+MA_MDTWNPP('data/mdgtw500_20b.txt',10000,5000,50,0.1)
+MA_MDTWNPP('data/mdgtw500_20c.txt',10000,5000,50,0.1)
+MA_MDTWNPP('data/mdgtw500_20d.txt',10000,5000,50,0.1)
+MA_MDTWNPP('data/mdgtw500_20e.txt',10000,5000,50,0.1)
